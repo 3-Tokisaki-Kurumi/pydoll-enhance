@@ -1957,6 +1957,15 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#pydoll.constants.Scripts.GET_PARENT_NODE" class="md-nav__link">
+    <span class="md-ellipsis">
+      <code class="doc-symbol doc-symbol-toc doc-symbol-attribute"></code>&nbsp;GET_PARENT_NODE
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -8684,6 +8693,15 @@
   <a href="#pydoll.constants.Scripts.MISC_OVERRIDES" class="md-nav__link">
     <span class="md-ellipsis">
       <code class="doc-symbol doc-symbol-toc doc-symbol-attribute"></code>&nbsp;MISC_OVERRIDES
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pydoll.constants.Scripts.GET_PARENT_NODE" class="md-nav__link">
+    <span class="md-ellipsis">
+      <code class="doc-symbol doc-symbol-toc doc-symbol-attribute"></code>&nbsp;GET_PARENT_NODE
     </span>
   </a>
   
@@ -15785,7 +15803,30 @@
   </span>
 
 </h4>
-<div class="language-python doc-signature highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="n">MISC_OVERRIDES</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">    // Override timezone</span><span class="se">\n</span><span class="s2">    const originalDateGetTimezoneOffset = Date.prototype.getTimezoneOffset;</span><span class="se">\n</span><span class="s2">    Date.prototype.getTimezoneOffset = function() {{</span><span class="se">\n</span><span class="s2">        return </span><span class="si">{timezone_offset}</span><span class="s2">;</span><span class="se">\n</span><span class="s2">    }};</span><span class="se">\n\n</span><span class="s2">    // Override Intl.DateTimeFormat</span><span class="se">\n</span><span class="s2">    if (window.Intl &amp;&amp; window.Intl.DateTimeFormat) {{</span><span class="se">\n</span><span class="s2">        const originalResolvedOptions = Intl.DateTimeFormat.prototype.resolvedOptions;</span><span class="se">\n</span><span class="s2">        Intl.DateTimeFormat.prototype.resolvedOptions = function() {{</span><span class="se">\n</span><span class="s2">            const options = originalResolvedOptions.call(this);</span><span class="se">\n</span><span class="s2">            options.timeZone = &#39;</span><span class="si">{timezone}</span><span class="s2">&#39;;</span><span class="se">\n</span><span class="s2">            return options;</span><span class="se">\n</span><span class="s2">        }};</span><span class="se">\n</span><span class="s2">    }}</span><span class="se">\n\n</span><span class="s2">    // Override connection type</span><span class="se">\n</span><span class="s2">    if (navigator.connection || navigator.mozConnection || navigator.webkitConnection) {{</span><span class="se">\n</span><span class="s2">        const connection = navigator.connection ||</span><span class="se">\n</span><span class="s2">                          navigator.mozConnection ||</span><span class="se">\n</span><span class="s2">                          navigator.webkitConnection;</span><span class="se">\n</span><span class="s2">        Object.defineProperty(connection, &#39;effectiveType&#39;, {{</span><span class="se">\n</span><span class="s2">            get: () =&gt; &#39;</span><span class="si">{connection_type}</span><span class="s2">&#39;,</span><span class="se">\n</span><span class="s2">            configurable: true</span><span class="se">\n</span><span class="s2">        }});</span><span class="se">\n</span><span class="s2">    }}</span><span class="se">\n\n</span><span class="s2">    // Hide automation indicators in Chrome</span><span class="se">\n</span><span class="s2">    Object.defineProperty(window, &#39;chrome&#39;, {{</span><span class="se">\n</span><span class="s2">        get: () =&gt; {{</span><span class="se">\n</span><span class="s2">            return {{</span><span class="se">\n</span><span class="s2">                runtime: {{</span><span class="se">\n</span><span class="s2">                    onConnect: undefined,</span><span class="se">\n</span><span class="s2">                    onMessage: undefined</span><span class="se">\n</span><span class="s2">                }}</span><span class="se">\n</span><span class="s2">            }};</span><span class="se">\n</span><span class="s2">        }},</span><span class="se">\n</span><span class="s2">        configurable: true</span><span class="se">\n</span><span class="s2">    }});</span><span class="se">\n\n</span><span class="s2">    // Override permissions</span><span class="se">\n</span><span class="s2">    if (navigator.permissions &amp;&amp; navigator.permissions.query) {{</span><span class="se">\n</span><span class="s2">        const originalQuery = navigator.permissions.query;</span><span class="se">\n</span><span class="s2">        navigator.permissions.query = function(parameters) {{</span><span class="se">\n</span><span class="s2">            return originalQuery(parameters).then(result =&gt; {{</span><span class="se">\n</span><span class="s2">                if (parameters.name === &#39;notifications&#39;) {{</span><span class="se">\n</span><span class="s2">                    Object.defineProperty(result, &#39;state&#39;, {{</span><span class="se">\n</span><span class="s2">                        get: () =&gt; &#39;denied&#39;,</span><span class="se">\n</span><span class="s2">                        configurable: true</span><span class="se">\n</span><span class="s2">                    }});</span><span class="se">\n</span><span class="s2">                }}</span><span class="se">\n</span><span class="s2">                return result;</span><span class="se">\n</span><span class="s2">            }});</span><span class="se">\n</span><span class="s2">        }};</span><span class="se">\n</span><span class="s2">    }}</span><span class="se">\n\n</span><span class="s2">    GET_PARENT_NODE = </span><span class="se">\n</span><span class="s2">        function() {</span><span class="se">\n</span><span class="s2">            return this.parentElement;</span><span class="se">\n</span><span class="s2">        }</span><span class="se">\n</span><span class="s2">    &quot;</span>
+<div class="language-python doc-signature highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="n">MISC_OVERRIDES</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">    // Override timezone</span><span class="se">\n</span><span class="s2">    const originalDateGetTimezoneOffset = Date.prototype.getTimezoneOffset;</span><span class="se">\n</span><span class="s2">    Date.prototype.getTimezoneOffset = function() {{</span><span class="se">\n</span><span class="s2">        return </span><span class="si">{timezone_offset}</span><span class="s2">;</span><span class="se">\n</span><span class="s2">    }};</span><span class="se">\n\n</span><span class="s2">    // Override Intl.DateTimeFormat</span><span class="se">\n</span><span class="s2">    if (window.Intl &amp;&amp; window.Intl.DateTimeFormat) {{</span><span class="se">\n</span><span class="s2">        const originalResolvedOptions = Intl.DateTimeFormat.prototype.resolvedOptions;</span><span class="se">\n</span><span class="s2">        Intl.DateTimeFormat.prototype.resolvedOptions = function() {{</span><span class="se">\n</span><span class="s2">            const options = originalResolvedOptions.call(this);</span><span class="se">\n</span><span class="s2">            options.timeZone = &#39;</span><span class="si">{timezone}</span><span class="s2">&#39;;</span><span class="se">\n</span><span class="s2">            return options;</span><span class="se">\n</span><span class="s2">        }};</span><span class="se">\n</span><span class="s2">    }}</span><span class="se">\n\n</span><span class="s2">    // Override connection type</span><span class="se">\n</span><span class="s2">    if (navigator.connection || navigator.mozConnection || navigator.webkitConnection) {{</span><span class="se">\n</span><span class="s2">        const connection = navigator.connection ||</span><span class="se">\n</span><span class="s2">                          navigator.mozConnection ||</span><span class="se">\n</span><span class="s2">                          navigator.webkitConnection;</span><span class="se">\n</span><span class="s2">        Object.defineProperty(connection, &#39;effectiveType&#39;, {{</span><span class="se">\n</span><span class="s2">            get: () =&gt; &#39;</span><span class="si">{connection_type}</span><span class="s2">&#39;,</span><span class="se">\n</span><span class="s2">            configurable: true</span><span class="se">\n</span><span class="s2">        }});</span><span class="se">\n</span><span class="s2">    }}</span><span class="se">\n\n</span><span class="s2">    // Hide automation indicators in Chrome</span><span class="se">\n</span><span class="s2">    Object.defineProperty(window, &#39;chrome&#39;, {{</span><span class="se">\n</span><span class="s2">        get: () =&gt; {{</span><span class="se">\n</span><span class="s2">            return {{</span><span class="se">\n</span><span class="s2">                runtime: {{</span><span class="se">\n</span><span class="s2">                    onConnect: undefined,</span><span class="se">\n</span><span class="s2">                    onMessage: undefined</span><span class="se">\n</span><span class="s2">                }}</span><span class="se">\n</span><span class="s2">            }};</span><span class="se">\n</span><span class="s2">        }},</span><span class="se">\n</span><span class="s2">        configurable: true</span><span class="se">\n</span><span class="s2">    }});</span><span class="se">\n\n</span><span class="s2">    // Override permissions</span><span class="se">\n</span><span class="s2">    if (navigator.permissions &amp;&amp; navigator.permissions.query) {{</span><span class="se">\n</span><span class="s2">        const originalQuery = navigator.permissions.query;</span><span class="se">\n</span><span class="s2">        navigator.permissions.query = function(parameters) {{</span><span class="se">\n</span><span class="s2">            return originalQuery(parameters).then(result =&gt; {{</span><span class="se">\n</span><span class="s2">                if (parameters.name === &#39;notifications&#39;) {{</span><span class="se">\n</span><span class="s2">                    Object.defineProperty(result, &#39;state&#39;, {{</span><span class="se">\n</span><span class="s2">                        get: () =&gt; &#39;denied&#39;,</span><span class="se">\n</span><span class="s2">                        configurable: true</span><span class="se">\n</span><span class="s2">                    }});</span><span class="se">\n</span><span class="s2">                }}</span><span class="se">\n</span><span class="s2">                return result;</span><span class="se">\n</span><span class="s2">            }});</span><span class="se">\n</span><span class="s2">        }};</span><span class="se">\n</span><span class="s2">    }}</span><span class="se">\n</span><span class="s2">    &quot;</span>
+</span></code></pre></div>
+
+    <div class="doc doc-contents ">
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h4 id="pydoll.constants.Scripts.GET_PARENT_NODE" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-attribute"></code>            <span class="doc doc-object-name doc-attribute-name">GET_PARENT_NODE</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+</h4>
+<div class="language-python doc-signature highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="n">GET_PARENT_NODE</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">        function() {</span><span class="se">\n</span><span class="s1">            return this.parentElement;</span><span class="se">\n</span><span class="s1">        }</span><span class="se">\n</span><span class="s1">    &#39;</span>
 </span></code></pre></div>
 
     <div class="doc doc-contents ">
